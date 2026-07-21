@@ -20,16 +20,14 @@ const (
 	port = "23234"
 )
 
-// example usage: ssh -N -R 23236:localhost:23235 -p 23234 localhost
-
 func main() {
-	// Create a new SSH ForwardedTCPHandler.
+
 	forwardHandler := &ssh.ForwardedTCPHandler{}
 	s, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
 		wish.WithHostKeyPath(".ssh/id_ed25519"),
 		func(s *ssh.Server) error {
-			// Set the Reverse TCP Handler up:
+
 			s.ReversePortForwardingCallback = func(_ ssh.Context, bindHost string, bindPort uint32) bool {
 				log.Info("reverse port forwarding allowed", "host", bindHost, "port", bindPort)
 				return true

@@ -1,12 +1,8 @@
 package main
 
-// An example Bubble Tea server. This will put an ssh session into alt screen
-// and continually print up to date terminal information.
-
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net"
 	"os"
 	"os/signal"
@@ -34,7 +30,7 @@ func main() {
 		wish.WithHostKeyPath(".ssh/id_ed25519"),
 		wish.WithMiddleware(
 			bubbletea.Middleware(teaHandler),
-			activeterm.Middleware(), // Bubble Tea apps usually require a PTY.
+			activeterm.Middleware(),
 			logging.Middleware(),
 		),
 	)
@@ -61,24 +57,11 @@ func main() {
 	}
 }
 
-// You can wire any Bubble Tea model up to the middleware with a function that
-// handles the incoming ssh.Session. Here we just grab the terminal info and
-// pass it to the new model. You can also return tea.ProgramOptions (such as
-// tea.WithAltScreen) on a session by session basis.
 func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
-	pty, _, _ := s.Pty()
-	m := model{
-		term:      pty.Term,
-		width:     pty.Window.Width,
-		height:    pty.Window.Height,
-		txtStyle:  lipgloss.NewStyle().Foreground(lipgloss.Color("10")),
-		quitStyle: lipgloss.NewStyle().Foreground(lipgloss.Color("8")),
-		bg:        "light",
-	}
-	return m, []tea.ProgramOption{}
+	_ = "STUB: not implemented"
+	return *new(tea.Model), nil
 }
 
-// Just a generic tea.Model to demo terminal information of ssh.
 type model struct {
 	term      string
 	profile   string
@@ -89,36 +72,11 @@ type model struct {
 	quitStyle lipgloss.Style
 }
 
-func (m model) Init() tea.Cmd {
-	// default values
-	return tea.Batch(
-		tea.RequestBackgroundColor,
-	)
-}
+func (m model) Init() tea.Cmd { _ = "STUB: not implemented"; return *new(tea.Cmd) }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg := msg.(type) {
-	case tea.ColorProfileMsg:
-		m.profile = msg.String()
-	case tea.BackgroundColorMsg:
-		if msg.IsDark() {
-			m.bg = "dark"
-		}
-	case tea.WindowSizeMsg:
-		m.height = msg.Height
-		m.width = msg.Width
-	case tea.KeyMsg:
-		switch msg.String() {
-		case "q", "ctrl+c":
-			return m, tea.Quit
-		}
-	}
-	return m, nil
+	_ = "STUB: not implemented"
+	return *new(tea.Model), *new(tea.Cmd)
 }
 
-func (m model) View() tea.View {
-	s := fmt.Sprintf("Your term is %s\nYour window size is %dx%d\nBackground: %s\nColor Profile: %s", m.term, m.width, m.height, m.bg, m.profile)
-	v := tea.NewView(m.txtStyle.Render(s) + "\n\n" + m.quitStyle.Render("Press 'q' to quit\n"))
-	v.AltScreen = true
-	return v
-}
+func (m model) View() tea.View { _ = "STUB: not implemented"; return *new(tea.View) }

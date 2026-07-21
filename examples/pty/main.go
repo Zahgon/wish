@@ -28,7 +28,6 @@ func main() {
 		wish.WithAddress(net.JoinHostPort(host, port)),
 		wish.WithHostKeyPath(".ssh/id_ed25519"),
 
-		// Wish can allocate a PTY per user session.
 		ssh.AllocatePty(),
 
 		wish.WithMiddleware(

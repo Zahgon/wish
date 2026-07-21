@@ -25,9 +25,6 @@ func main() {
 	s, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
 
-		// Allocate a pty.
-		// This creates a pseudoconsole on windows, compatibility is limited in
-		// that case, see the open issues for more details.
 		ssh.AllocatePty(),
 		wish.WithMiddleware(
 			func(next ssh.Handler) ssh.Handler {
@@ -39,7 +36,7 @@ func main() {
 					next(s)
 				}
 			},
-			// ensure the user has requested a tty
+
 			activeterm.Middleware(),
 			logging.Middleware(),
 		),

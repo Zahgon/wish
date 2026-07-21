@@ -6,7 +6,6 @@ import (
 	"net"
 	"os"
 	"os/signal"
-	"runtime"
 	"syscall"
 	"time"
 
@@ -18,7 +17,6 @@ import (
 	"charm.land/wish/v2/bubbletea"
 	"charm.land/wish/v2/logging"
 	"github.com/charmbracelet/ssh"
-	"github.com/charmbracelet/x/editor"
 )
 
 const (
@@ -30,15 +28,11 @@ func main() {
 	s, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
 
-		// Allocate a pty.
-		// This creates a pseudoconsole on windows, compatibility is limited in
-		// that case, see the open issues for more details.
 		ssh.AllocatePty(),
 		wish.WithMiddleware(
-			// run our Bubble Tea handler
+
 			bubbletea.Middleware(teaHandler),
 
-			// ensure the user has requested a tty
 			activeterm.Middleware(),
 			logging.Middleware(),
 		),
@@ -67,15 +61,8 @@ func main() {
 }
 
 func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
-	// Set up the model with the current session and styles.
-	// We'll use the session to call wish.Command, which makes it compatible
-	// with tea.Command.
-	m := model{
-		sess:     s,
-		style:    lipgloss.NewStyle().Foreground(lipgloss.Color("8")),
-		errStyle: lipgloss.NewStyle().Foreground(lipgloss.Color("3")),
-	}
-	return m, []tea.ProgramOption{}
+	_ = "STUB: not implemented"
+	return *new(tea.Model), nil
 }
 
 type model struct {
@@ -85,68 +72,13 @@ type model struct {
 	errStyle lipgloss.Style
 }
 
-func (m model) Init() tea.Cmd {
-	return nil
-}
+func (m model) Init() tea.Cmd { _ = "STUB: not implemented"; return *new(tea.Cmd) }
 
 type cmdFinishedMsg struct{ err error }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		switch msg.String() {
-		case "e":
-			// Open file.txt in the default editor.
-			edit, err := editor.Cmd("wish", "file.txt")
-			if err != nil {
-				m.err = err
-				return m, nil
-			}
-			// Creates a wish.Cmd from the exec.Cmd
-			wishCmd := wish.Command(m.sess, edit.Path, edit.Args...)
-			// Runs the cmd through Bubble Tea.
-			// Bubble Tea should handle the IO to the program, and get it back
-			// once the program quits.
-			cmd := tea.Exec(wishCmd, func(err error) tea.Msg {
-				if err != nil {
-					log.Error("editor finished", "error", err)
-				}
-				return cmdFinishedMsg{err: err}
-			})
-			return m, cmd
-		case "s":
-			// We can also execute a shell and give it over to the user.
-			// Note that this session won't have control, so it can't run tasks
-			// in background, suspend, etc.
-			c := wish.Command(m.sess, "htop")
-			if runtime.GOOS == "windows" {
-				c = wish.Command(m.sess, "powershell")
-			}
-			cmd := tea.Exec(c, func(err error) tea.Msg {
-				if err != nil {
-					log.Error("shell finished", "error", err)
-				}
-				return cmdFinishedMsg{err: err}
-			})
-			return m, cmd
-		case "q", "ctrl+c":
-			return m, tea.Quit
-		}
-	case cmdFinishedMsg:
-		m.err = msg.err
-		return m, nil
-	}
-
-	return m, nil
+	_ = "STUB: not implemented"
+	return *new(tea.Model), *new(tea.Cmd)
 }
 
-func (m model) View() tea.View {
-	var v tea.View
-	if m.err != nil {
-		v.SetContent(m.errStyle.Render(m.err.Error() + "\n"))
-		return v
-	}
-
-	v.SetContent(m.style.Render("Press 'e' to edit, 's' to hop into a shell, or 'q' to quit...\n"))
-	return v
-}
+func (m model) View() tea.View { _ = "STUB: not implemented"; return *new(tea.View) }

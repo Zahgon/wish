@@ -31,7 +31,7 @@ func main() {
 	s, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
 		wish.WithHostKeyPath(".ssh/id_ed25519"),
-		// A banner is always shown, even before authentication.
+
 		wish.WithBannerHandler(func(ctx ssh.Context) string {
 			return fmt.Sprintf(banner, ctx.User())
 		}),
@@ -46,7 +46,7 @@ func main() {
 				}
 			},
 			logging.Middleware(),
-			// This middleware prints the session duration before disconnecting.
+
 			elapsed.Middleware(),
 		),
 	)

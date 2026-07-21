@@ -21,28 +21,7 @@ const (
 	port = "23235"
 )
 
-func cmd() *cobra.Command {
-	var reverse bool
-	cmd := &cobra.Command{
-		Use:  "echo [string]",
-		Args: cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			s := args[0]
-			if reverse {
-				ss := make([]byte, 0, len(s))
-				for i := len(s) - 1; i >= 0; i-- {
-					ss = append(ss, s[i])
-				}
-				s = string(ss)
-			}
-			cmd.Println(s)
-			return nil
-		},
-	}
-
-	cmd.PersistentFlags().BoolVarP(&reverse, "reverse", "r", false, "Reverse string on echo")
-	return cmd
-}
+func cmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 func main() {
 	s, err := wish.NewServer(
@@ -51,8 +30,7 @@ func main() {
 		wish.WithMiddleware(
 			func(next ssh.Handler) ssh.Handler {
 				return func(sess ssh.Session) {
-					// Here we wire our command's args and IO to the user
-					// session's
+
 					rootCmd := cmd()
 					rootCmd.SetArgs(sess.Command())
 					rootCmd.SetIn(sess)

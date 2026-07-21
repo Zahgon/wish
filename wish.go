@@ -1,98 +1,40 @@
 package wish
 
 import (
-	"fmt"
-	"io"
-
-	"github.com/charmbracelet/keygen"
 	"github.com/charmbracelet/ssh"
 )
 
-// Middleware is a function that takes an ssh.Handler and returns an
-// ssh.Handler. Implementations should call the provided handler argument.
 type Middleware func(next ssh.Handler) ssh.Handler
 
-// NewServer is returns a default SSH server with the provided Middleware. A
-// new SSH key pair of type ed25519 will be created if one does not exist. By
-// default this server will accept all incoming connections, password and
-// public key.
-func NewServer(ops ...ssh.Option) (*ssh.Server, error) {
-	s := &ssh.Server{}
-	for _, op := range ops {
-		if err := s.SetOption(op); err != nil {
-			return nil, err //nolint:wrapcheck
-		}
-	}
-	if len(s.HostSigners) == 0 {
-		k, err := keygen.New("id_ed25519", keygen.WithKeyType(keygen.Ed25519), keygen.WithWrite())
-		if err != nil {
-			return nil, err //nolint:wrapcheck
-		}
-		err = s.SetOption(WithHostKeyPEM(k.RawPrivateKey()))
-		if err != nil {
-			return nil, err //nolint:wrapcheck
-		}
-	}
-	return s, nil
-}
+func NewServer(ops ...ssh.Option) (*ssh.Server, error) { _ = "STUB: not implemented"; return nil, nil }
 
-// Fatal prints to the given session's STDERR and exits 1.
-func Fatal(s ssh.Session, v ...interface{}) {
-	Error(s, v...)
-	_ = s.Exit(1)
-	_ = s.Close()
-}
+//nolint:wrapcheck
 
-// Fatalf formats according to the given format, prints to the session's STDERR
-// followed by an exit 1.
-//
-// Notice that this might cause formatting issues if you don't add a \r\n in the end of your string.
-func Fatalf(s ssh.Session, f string, v ...interface{}) {
-	Errorf(s, f, v...)
-	_ = s.Exit(1)
-	_ = s.Close()
-}
+//nolint:wrapcheck
 
-// Fatalln formats according to the default format, prints to the session's
-// STDERR, followed by a new line and an exit 1.
-func Fatalln(s ssh.Session, v ...interface{}) {
-	Errorln(s, v...)
-	Errorf(s, "\r")
-	_ = s.Exit(1)
-	_ = s.Close()
-}
+//nolint:wrapcheck
 
-// Error prints the given error the the session's STDERR.
-func Error(s ssh.Session, v ...interface{}) {
-	_, _ = fmt.Fprint(s.Stderr(), v...)
-}
+func Fatal(s ssh.Session, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-// Errorf formats according to the given format and prints to the session's STDERR.
-func Errorf(s ssh.Session, f string, v ...interface{}) {
-	_, _ = fmt.Fprintf(s.Stderr(), f, v...)
-}
+func Fatalf(s ssh.Session, f string, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-// Errorln formats according to the default format and prints to the session's STDERR.
-func Errorln(s ssh.Session, v ...interface{}) {
-	_, _ = fmt.Fprintln(s.Stderr(), v...)
-}
+func Fatalln(s ssh.Session, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-// Print writes to the session's STDOUT followed.
-func Print(s ssh.Session, v ...interface{}) {
-	_, _ = fmt.Fprint(s, v...)
-}
+func Error(s ssh.Session, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-// Printf formats according to the given format and writes to the session's STDOUT.
-func Printf(s ssh.Session, f string, v ...interface{}) {
-	_, _ = fmt.Fprintf(s, f, v...)
-}
+func Errorf(s ssh.Session, f string, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-// Println formats according to the default format and writes to the session's STDOUT.
-func Println(s ssh.Session, v ...interface{}) {
-	_, _ = fmt.Fprintln(s, v...)
-}
+func Errorln(s ssh.Session, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-// WriteString writes the given string to the session's STDOUT.
+func Print(s ssh.Session, v ...interface{}) { _ = "STUB: not implemented"; return }
+
+func Printf(s ssh.Session, f string, v ...interface{}) { _ = "STUB: not implemented"; return }
+
+func Println(s ssh.Session, v ...interface{}) { _ = "STUB: not implemented"; return }
+
 func WriteString(s ssh.Session, v string) (int, error) {
-	return io.WriteString(s, v) //nolint:wrapcheck
+	_ = "STUB: not implemented"
+	return 0,
+		//nolint:wrapcheck
+		nil
 }
